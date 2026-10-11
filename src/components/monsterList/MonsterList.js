@@ -20,5 +20,14 @@ export default class MonsterList {
     this.domElt.innerHTML = getTemplate();
     this.listDomElt = this.domElt.querySelector(".monster-list");
     this.monsters.forEach((monster) => this.listDomElt.append(monster.render()));
+    this.renderMonstersCount();
   }
+
+
+getMonstersCount(){
+  return this.monsters.length;
+}
+renderMonstersCount(){
+  this.domElt.querySelector(".monsters-count").innerText= this.getMonstersCount();
+}
 }
