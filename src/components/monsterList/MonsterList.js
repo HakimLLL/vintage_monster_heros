@@ -16,18 +16,48 @@ export default class MonsterList {
     this.render();
   }
 
+  getMonstersCount(){
+  return this.monsters.length;
+}
+renderMonstersCount(){
+  this.domElt.querySelector(".monsters-count").innerText= this.getMonstersCount();
+}
+
+
   render() {
     this.domElt.innerHTML = getTemplate();
     this.listDomElt = this.domElt.querySelector(".monster-list");
     this.monsters.forEach((monster) => this.listDomElt.append(monster.render()));
     this.renderMonstersCount();
+    this.initEvents()
   }
 
-
-getMonstersCount(){
-  return this.monsters.length;
+async addMonster(data) {
+  const monster = await DB.create(data);
+  const newMonster = new Monster(monster);
+  this.monsters.push(newMonster);
+  this.listDomElt.append(newMonster.render());
+  this.renderMonstersCount();
 }
-renderMonstersCount(){
-  this.domElt.querySelector(".monsters-count").innerText= this.getMonstersCount();
+
+
+initEvents() {
+  const nameInput = this.domElt.querySelector(".new-name");
+  const typeInput = this.domElt.querySelector(".new-type");
+  const dangerInput = this.domElt.querySelector(".new-danger");
+  const yearInput = this.domElt.querySelector(".new-year");
+
+  this.domElt.querySelector(".btn-add").addEventListener("click", () => {
+    if (nameInput.value == "") return;
+    this.addMonster({
+      name: nameInput.value,
+      type: typeInput.value,
+      dangerLevel: Number(dangerInput.value),
+      year: Number(yearInput.value),
+    });
+    nameInput.value = "";
+    dangerInput.value = "";
+    yearInput.value = "";
+  });
 }
 }
