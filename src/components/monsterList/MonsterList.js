@@ -1,5 +1,6 @@
 import DB from "../../DB";
 import Monster from "../monster/Monster";
+import getTemplate from "./template";
 
 export default class MonsterList {
   constructor(data) {
@@ -12,6 +13,12 @@ export default class MonsterList {
   async loadMonsters() {
     const monsters = await DB.findAll();
     this.monsters = monsters.map((monster) => new Monster(monster));
-    console.table(this.monsters);
+    this.render();
+  }
+
+  render() {
+    this.domElt.innerHTML = getTemplate();
+    this.listDomElt = this.domElt.querySelector(".monster-list");
+    this.monsters.forEach((monster) => this.listDomElt.append(monster.render()));
   }
 }
