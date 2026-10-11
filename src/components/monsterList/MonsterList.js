@@ -59,5 +59,21 @@ initEvents() {
     dangerInput.value = "";
     yearInput.value = "";
   });
+
+  this.listDomElt.addEventListener("monster:deleted", async (e) => {
+  await this.deleteOneById(e.detail.id);
+});
+}
+
+async deleteOneById(id) {
+  await DB.deleteOneById(id);
+
+  this.monsters.splice(
+    this.monsters.findIndex((monster) => monster.id == id),
+    1,
+  );
+
+  this.domElt.querySelector(`[data-id='${id}']`).remove();
+  this.renderMonstersCount();
 }
 }
